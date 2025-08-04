@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "outDir": "./dis", //es donde se va a compilar este proyecto una vez hagamos el build de producción
+        "rootDir": "./src", //carpeta principal donde va a encontrar el código, lo movemos todo a esta carpeta
+        "lib":["ESNext"], 
+        "target": "ESNext",
+        "moduleResolution": "NodeNext",
+        "module": "NodeNext",
+        "strict":false,
+        "sourceMap": false,
+        "esModuleInterop": true,
+        "declaration": true,
+    },
+    "include": ["src/**/*.ts"]
+}

@@ -27,3 +27,8 @@ app.get('/ecomerce', (req, res)=>{
 app.listen(port, ()=>{
     console.log('Servidor funcionando en el puerto:', port)
 })
+
+//INSTALAMOS TYPESCRIPT
+// npm i -D typescript ts-node (lo instalamos como dependencia de desarrollo, en producción ya se compila a javascript ya que 
+//el servidor solo admite javascript)
+//como express no soporta typescript, tenemos que configurar mediante un archivo tsconfig.json
