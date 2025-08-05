@@ -32,3 +32,9 @@ app.listen(port, ()=>{
 // npm i -D typescript ts-node (lo instalamos como dependencia de desarrollo, en producción ya se compila a javascript ya que 
 //el servidor solo admite javascript)
 //como express no soporta typescript, tenemos que configurar mediante un archivo tsconfig.json
+
+// para las bases de datos, vamos a untilizar mongoose y nos habremos creado una bd en Mongo Atlas.
+//de aqui es de donde cogemos los datos que pondremos en nuestra configuracion de la base de datos. config/db.ts
+// para crear nuestras variables de entorno, como nodemon no admite variables de entorno, tendremos que instalar
+// npm i dotenv - cargamos esta dependencia en el archivo server.ts import 'dotenv/config'
+// npm i colors - esta dependecia es para darle color en la terminal a lo que queramos para marcar errores, etc..
