@@ -1,12 +1,12 @@
 import {Router} from 'express'
+import { createAuth } from './handlers';
+
 
 const router = Router();
 
 //routing
 /*Auteticación y registro*/
-router.post('/auth/register', (req, res)=>{ 
-    console.log(req.body)
-})
+router.post('/auth/register', createAuth)
 
 
 

@@ -38,3 +38,6 @@ app.listen(port, ()=>{
 // para crear nuestras variables de entorno, como nodemon no admite variables de entorno, tendremos que instalar
 // npm i dotenv - cargamos esta dependencia en el archivo server.ts import 'dotenv/config'
 // npm i colors - esta dependecia es para darle color en la terminal a lo que queramos para marcar errores, etc..
+
+//tendremos que crear una carpeta models y dentro  un schema de los datos que vamos a recoger, los atrivutos que tendran
+//Es decir con el schema, marcamos las reglas que van a tener los datos que recogemos.
