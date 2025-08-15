@@ -1,6 +1,6 @@
 import {Router} from 'express'
 import {body} from 'express-validator'; // Importamos express-validator para validaciones
-import { createAuth } from './handlers';
+import { createAuth, login } from './handlers';
 
 
 const router = Router();
@@ -14,7 +14,10 @@ router.post('/auth/register',
     body('password').isLength({ min: 6 }).withMessage('La contraseña debe tener al menos 6 caracteres'),
      createAuth)
 
-
+router.post('/auth/login',
+    body('email').isEmail().withMessage('El email debe ser válido'),
+    body('password').notEmpty().withMessage('El password es obligatorio'),
+     login)
 
 
 export default router;

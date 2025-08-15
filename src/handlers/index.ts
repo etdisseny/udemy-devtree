@@ -1,14 +1,15 @@
 import User from "../models/Users";
 import { Request, Response } from "express"; //expres ya tiene algunos tipados que podemos utilizar
-import { hashPassword } from "../utils/auth";
+import { checkPassword, hashPassword } from "../utils/auth";
 //import slug from "slug";
 import { validationResult } from "express-validator"; // Importamos validationResult para manejar errores de validación
 
+/*REGISTRO*/
 export const createAuth = async (req: Request, res: Response) => {
   /*MANEJAR ERRORES DE VALIDACION*/
   let errors = validationResult(req); //validamos los datos que nos llegan por el body, query, params etc...
-  if(!errors.isEmpty()) {
-    return res.status(400).json({errors: errors.array()}); //si hay errores, devolvemos un status 400 y los errores
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() }); //si hay errores, devolvemos un status 400 y los errores
   }
   /*COMPROVACION QUE NO HAYA EMAIL DUPLICADO */
   //lo comprovamos antes de que cree el registro
@@ -57,3 +58,30 @@ export const createAuth = async (req: Request, res: Response) => {
 //validar que los datos son correctos, y si no lo son, nos devuelve un error con el mensaje que le pasemos.
 //npm i express-validator
 //lo pondremos en el router para no hacer este archivo tan grande, y asi tener un codigo mas limpio y ordenado
+
+/*AUTENTICACIÓN*/
+//Comprobamos que el usuario exista y que el password sea el correcto
+
+export const login = async (req: Request, res: Response) => {
+  //le pasamos igualmente la validación como en el registro
+  let errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+  const { email, password } = req.body;
+  //revisar si el usuario esta registrado
+  const user = await User.findOne({ email });
+  if (!user) {
+    const error = new Error("El usuario no existe");
+    return res.status(404).json({ error: error.message });
+  }
+  //comprobar el password
+  //pasamos el password de la request y el hasheado en la bases de dtos
+  const isPasswordCorrect = await checkPassword(password, user.password) // me retorna o true o false
+   if (!isPasswordCorrect) {
+    const error = new Error("El password no es correcto");
+    return res.status(401).json({ error: error.message });
+  }
+  res.send("Autenticado...")
+ 
+};
