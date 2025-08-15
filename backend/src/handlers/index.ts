@@ -6,11 +6,14 @@ import { validationResult } from "express-validator"; // Importamos validationRe
 
 /*REGISTRO*/
 export const createAuth = async (req: Request, res: Response) => {
+
   /*MANEJAR ERRORES DE VALIDACION*/
-  let errors = validationResult(req); //validamos los datos que nos llegan por el body, query, params etc...
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() }); //si hay errores, devolvemos un status 400 y los errores
-  }
+  // let errors = validationResult(req); //validamos los datos que nos llegan por el body, query, params etc...
+  // if (!errors.isEmpty()) {
+  //   return res.status(400).json({ errors: errors.array() }); //si hay errores, devolvemos un status 400 y los errores
+  // }
+  //Nos hemos llevado el manejo de errores a un middelware y lo llamaremos desde router...
+
   /*COMPROVACION QUE NO HAYA EMAIL DUPLICADO */
   //lo comprovamos antes de que cree el registro
   const { email, password } = req.body;
@@ -23,6 +26,7 @@ export const createAuth = async (req: Request, res: Response) => {
     return res.status(409).json({ error: error.message }); //hacemos un return con la respuesta poniendole un status que podemos buscar que numero seria el más adecuado
     // y devolvemos con json el error: error.message
   }
+
   /*ANULO EL APARTADO DEL SLUG, YA QUE NO FUNCIONA, pero se haria así*/
   //con una dependencia que hemos instalado 'slug' convertimos el handle para que no tenga espacios ni mayusculas,
   //es decir que sea un código amigable para poner en la url.
@@ -63,11 +67,12 @@ export const createAuth = async (req: Request, res: Response) => {
 //Comprobamos que el usuario exista y que el password sea el correcto
 
 export const login = async (req: Request, res: Response) => {
-  //le pasamos igualmente la validación como en el registro
-  let errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
+  /*VALIDAR ERRORES*/
+  //le pasariamos la validación como en el registro, pero como tenemos el middelware, ya lo hacemos en el router...
+  // let errors = validationResult(req);
+  // if (!errors.isEmpty()) {
+  //   return res.status(400).json({ errors: errors.array() });
+  //}
   const { email, password } = req.body;
   //revisar si el usuario esta registrado
   const user = await User.findOne({ email });
