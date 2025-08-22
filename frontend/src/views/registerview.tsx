@@ -1,26 +1,36 @@
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { ErrorsMessage } from "../components/errorsmessage";
+import type { RegisterForm } from '../types/index';
+import axios from axios;
 
 export const RegisterView = () => {
-  const initialValues = {
-    name:'',
-    email:'',
-    handle:'',
-    password:'',
-    password_confirmation:''
-  }
+  const initialValues : RegisterForm = {
+    name: "",
+    email: "",
+    handle: "",
+    password: "",
+    password_confirmation: "",
+  };
   const {
     register,
     watch,
     handleSubmit,
     formState: { errors },
-  } = useForm({defaultValues:initialValues});
+  } = useForm({ defaultValues: initialValues });
 
+  const password = watch('password'); //nos mira que contiene password
+  
 
-const handleRegister = ()=>{
-  console.log('Desde register');
-}
+  const handleRegister = async (formData : RegisterForm) => {
+    try {
+      const response = await axios.post('http://localhost:4000/auth/register', formData)
+      console.log(response)
+    } catch (error) {
+      console.log(error)
+    }
+  };
+
   return (
     <>
       <h1 className="text-white font-bold text-2xl">Crear cuenta</h1>
@@ -41,9 +51,7 @@ const handleRegister = ()=>{
               required: "El campo nombre es obligatorio",
             })}
           />
-          {errors.name && <ErrorsMessage>
-            {errors.name.message}
-            </ErrorsMessage>}
+          {errors.name && <ErrorsMessage>{errors.name.message}</ErrorsMessage>}
         </div>
         <div className="grid grid-cols-1 space-y-3">
           <label htmlFor="email" className="text-2xl text-slate-500">
@@ -54,13 +62,17 @@ const handleRegister = ()=>{
             type="email"
             placeholder="Email de Registro"
             className="bg-slate-100 border-none p-3 rounded-lg placeholder-slate-400"
-             {...register("email", {
+            {...register("email", {
               required: "El campo email es obligatorio",
+              pattern: {
+                value: /\S+@\S+\.\S+/,
+                message: "E-mail no válido",
+              },
             })}
           />
-          {errors.email && <ErrorsMessage>
-            {errors.email.message}
-            </ErrorsMessage>}
+          {errors.email && (
+            <ErrorsMessage>{errors.email.message}</ErrorsMessage>
+          )}
         </div>
         <div className="grid grid-cols-1 space-y-3">
           <label htmlFor="handle" className="text-2xl text-slate-500">
@@ -75,9 +87,9 @@ const handleRegister = ()=>{
               required: "El campo handle es obligatorio",
             })}
           />
-          {errors.handle && <ErrorsMessage>
-            {errors.handle.message}
-            </ErrorsMessage>}
+          {errors.handle && (
+            <ErrorsMessage>{errors.handle.message}</ErrorsMessage>
+          )}
         </div>
         <div className="grid grid-cols-1 space-y-3">
           <label htmlFor="password" className="text-2xl text-slate-500">
@@ -90,11 +102,16 @@ const handleRegister = ()=>{
             className="bg-slate-100 border-none p-3 rounded-lg placeholder-slate-400"
             {...register("password", {
               required: "El campo password es obligatorio",
+              minLength:{
+                value:8,
+                message:"El password tiene que tener mínimo 8 caractéres"
+              }
+
             })}
           />
-          {errors.password && <ErrorsMessage>
-            {errors.password.message}
-            </ErrorsMessage>}
+          {errors.password && (
+            <ErrorsMessage>{errors.password.message}</ErrorsMessage>
+          )}
         </div>
 
         <div className="grid grid-cols-1 space-y-3">
@@ -111,11 +128,16 @@ const handleRegister = ()=>{
             className="bg-slate-100 border-none p-3 rounded-lg placeholder-slate-400"
             {...register("password_confirmation", {
               required: "El campo password es obligatorio",
+              //le pasamos el value que es el valor de este campo y una arrow function
+              //o los campos coinciden o sino lanza el mensaje
+              validate: (value)=>value === password || "Los passwords deben coincidir" 
             })}
           />
-          {errors.password_confirmation && <ErrorsMessage>
-            {errors.password_confirmation.message}
-            </ErrorsMessage>}
+          {errors.password_confirmation && (
+            <ErrorsMessage>
+              {errors.password_confirmation.message}
+            </ErrorsMessage>
+          )}
         </div>
 
         <input
