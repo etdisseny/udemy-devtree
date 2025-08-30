@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { ErrorsMessage } from "../components/errorsmessage";
 import type { RegisterForm } from '../types/index';
-import axios from axios;
+import axios from "axios";
 
 export const RegisterView = () => {
   const initialValues : RegisterForm = {
